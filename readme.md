@@ -1,5 +1,5 @@
 # 基于多层感知机的手写数字识别算法及实现
-![image](../data/mnist_100_digits.png)
+![image](https://github.com/cgpeter96/assignment/blob/master/data/mnist_100_digits.png)
 ## 实验介绍
 本次实验需要使用python(3.0以上)实现基于多层感知机的手写数字识别算法.请将全部代码
 写在Network.py中。请独立完成本次实验。
