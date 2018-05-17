@@ -12,9 +12,10 @@ function usually called by our neural network code.
 # Standard library
 import pickle
 import gzip
-
+from os.path import dirname, join
 # Third-party libraries
 import numpy as np
+
 
 def load_data():
     """Return the MNIST data as a tuple containing the training data,
@@ -39,10 +40,12 @@ def load_data():
     That's done in the wrapper function ``load_data_wrapper()``, see
     below.
     """
-    f = gzip.open('../data/mnist.pkl.gz', 'rb')
-    training_data, validation_data, test_data = pickle.load(f,encoding='latin1')
+    f = gzip.open(join(dirname(dirname(__file__)), 'data', 'mnist.pkl.gz'))
+    training_data, validation_data, test_data = pickle.load(
+        f, encoding='latin1')
     f.close()
     return (training_data, validation_data, test_data)
+
 
 def load_data_wrapper():
     """Return a tuple containing ``(training_data, validation_data,
@@ -66,14 +69,15 @@ def load_data_wrapper():
     turn out to be the most convenient for use in our neural network
     code."""
     tr_d, va_d, te_d = load_data()
-    training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
-    training_results = [vectorized_result(y) for y in tr_d[1]]
-    training_data =[ (x,y)for x,y in zip(training_inputs, training_results)]
-    validation_inputs = [np.reshape(x, (784, 1)) for x in va_d[0]]
-    validation_data = [ (x,y)for x,y in zip(validation_inputs, va_d[1])]
-    test_inputs = [np.reshape(x, (784, 1)) for x in te_d[0]]
-    test_data =[ (x,y)for x,y in zip(test_inputs, te_d[1])]
+    training_inputs = map(lambda x: np.reshape(x, (784, 1)), tr_d[0])
+    training_results = map(lambda y: vectorized_result(y), tr_d[1])
+    training_data = [(x, y) for x, y in zip(training_inputs, training_results)]
+    validation_inputs = map(lambda x: np.reshape(x, (784, 1)), va_d[0])
+    validation_data = [(x, y) for x, y in zip(validation_inputs, va_d[1])]
+    test_inputs = map(lambda x: np.reshape(x,(784,1)),te_d[0])
+    test_data = [(x, y) for x, y in zip(test_inputs, te_d[1])]
     return (training_data, validation_data, test_data)
+
 
 def vectorized_result(j):
     """Return a 10-dimensional unit vector with a 1.0 in the jth
